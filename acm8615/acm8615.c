@@ -449,16 +449,13 @@ static int acm8615_i2c_probe(struct i2c_client *i2c)
 	
     int ret;
     int fw_size;
-
-
-    
-    ret = of_property_read_u8_array(dev->of_node, "acme,dsp-firmware-dsp_cfg_preboot", NULL, 0);
-    if (ret < 0) {
-        dev_err(dev, "No firmware found in DTS\n");
+    int count;
+	
+    int count = of_property_count_u8_elems(dev->of_node, "acme,dsp-firmware-dsp_cfg_preboot");
+    if (count < 1)
         return -EINVAL;
-    }
 
-    fw_size = ret;  
+    fw_size = count;  
 
     acm8615->dsp_cfg_data = devm_kmalloc(dev, fw_size, GFP_KERNEL);
     if (!acm8615->dsp_cfg_data)
